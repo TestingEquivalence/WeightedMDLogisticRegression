@@ -13,10 +13,9 @@ asymptStDev<-function(mdr){
   q=c(q0,q1)
   
   #calculate derivative
-  p=q1/(q1+q0)
-  f=p-mdr$residuals
-  dq0=mdr$residuals*mdr$residuals-2*mdr$residuals*p/(q0+q1)
-  dq1=2*p*mdr$residuals+mdr$residuals*mdr$residuals
+  r=mdr$residuals
+  dq0=r*r-2*r*p
+  dq1=r*r+2*r*q0/(q1+q0)
   
   vol=asymptSDMultinomial(p=c(q0,q1), derivative=c(dq0,dq1))
   return(vol/sqrt(mdr$n))
