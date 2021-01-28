@@ -14,7 +14,7 @@ df$n=df$Survived+df$Deceased
 df=df[df$n>0,]
 df$p=df$Survived/df$n
 
-frm="p ~ 0+Class+Sex+Age"
+frm="p ~ Class+Sex+Age"
 
 
 # fitting the model and perform a single equivalence tests

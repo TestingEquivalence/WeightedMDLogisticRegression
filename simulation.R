@@ -69,7 +69,8 @@ updateLogitModel<-function(p,lr){
   
   df[[depVar]]=p
   nlr=update(lr,data=df)
-  nlr$min.distance=sqrt(sum((p-nlr$fitted.values)^2))
+  v=(p-nlr$fitted.values)*weights(lr)/sum(weights(lr))
+  nlr$min.distance=sqrt(sum((v)^2))
   if (is.infinite(nlr$min.distance)){browser()}
   
   return(nlr)
