@@ -14,7 +14,7 @@ df=aggregate(cbind(ncases,ncontrols) ~ agegp+tobgp+alcgp, df, sum)
 df$n=df$ncases+df$ncontrols
 df$p=df$ncases/(df$ncases+df$ncontrols)
 
-frm="p ~ agegp+tobgp+alcgp"
+frm="p ~ 0+agegp+tobgp+alcgp"
 
 # fitting the model and perform a single equivalence tests
 ###########################################################

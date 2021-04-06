@@ -1,5 +1,6 @@
 source("asymptoticTest.R")
 source("bootstrapTest.R")
+source("bootstrapTest2.R")
 source("simulation.R")
 library(minpack.lm)
 
@@ -7,6 +8,7 @@ logit=qlogis
 logistic = plogis
 asymptotic="asymptotic"
 bootstrap="bootstrap"
+bootstrap2="bootstrap2"
 
 min_dst_logit<-function(formula,data, weights,  test, alpha=0.05,
                         nSimulation=200){
@@ -55,9 +57,14 @@ min_dst_logit<-function(formula,data, weights,  test, alpha=0.05,
     mdr$min.epsilon=asymptoticTest(mdr=mdr)
   }
 
-  if ("bootstrap"==test){
+  if (bootstrap==test){
     mdr$min.epsilon=bootstrapTest(mdr,nSimulation)
   }
+  
+  if (bootstrap2==test){
+    mdr$min.epsilon=bootstrapTest2(mdr,nSimulation)
+  }
+  
   
   return(mdr)
 }
@@ -67,6 +74,7 @@ updateMinDistanceModel<-function(p,mdr){
   y=all.vars(as.formula(mdr$frm))[1]
   df[[y]]=p
   
-  nlr=min_dst_logit(mdr$frm,df,weights=mdr$weights,test = mdr$test)
+  nlr=min_dst_logit(mdr$frm,df,weights=mdr$weights,test = mdr$test, alpha = mdr$alpha,
+                    nSimulation = mdr$nSimulation)
   return(nlr)
 }
