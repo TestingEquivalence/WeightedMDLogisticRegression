@@ -3,10 +3,8 @@ bootstrapVolatility<-function(mdr,nSimulation){
   y=all.vars(as.formula(mdr$frm))[1]
   p=mdr$data[[y]]
  
-  mdr$test="asymptotic"
+  mdr$test=none
   res=rep(NA,nSimulation)
-  
-  
   
   for (i in c(1:nSimulation)){
     #resample cell sizes first
@@ -19,9 +17,7 @@ bootstrapVolatility<-function(mdr,nSimulation){
     return(sd(res))
 }
 
-bootstrapTest<-function(mdr,nSimulation){
-  
-  
+asymptoticTestBootstrapVariance<-function(mdr,nSimulation){
   #calculate asymptotic min eps
   vol = bootstrapVolatility(mdr,nSimulation)
   qt=qnorm(1-mdr$alpha,0,1)

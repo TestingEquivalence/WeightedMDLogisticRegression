@@ -1,10 +1,10 @@
-bootstrapTest2<-function(mdr,nSimulation){
+empiricalBootstrapTest<-function(mdr,nSimulation){
   #calculate bootstrap distribution
   y=all.vars(as.formula(mdr$frm))[1]
   p=mdr$data[[y]]
   n=mdr$weights
   
-  mdr$test="asymptotic"
+  mdr$test=none
   res=rep(NA,nSimulation)
   
   for (i in c(1:nSimulation)){
@@ -14,6 +14,8 @@ bootstrapTest2<-function(mdr,nSimulation){
   }
   
   #calculate quantile of bootstrap distribution
-  qt=quantile(res,1-mdr$alpha,type=1)
-  return(sqrt(qt))
+  qt=quantile(res,mdr$alpha,type=1)
+  min_eps=-qt+2*mdr$min.distance^2
+  if (min_eps<0) {return(0)}
+  return(sqrt(min_eps))
 }

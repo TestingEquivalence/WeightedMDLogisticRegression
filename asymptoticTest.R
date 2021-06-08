@@ -18,7 +18,7 @@ asymptStDev<-function(mdr){
   dq1=r*r+2*r*q0/(q1+q0)
   
   vol=asymptSDMultinomial(p=c(q0,q1), derivative=c(dq0,dq1))
-  return(vol/sqrt(mdr$n))
+  return(vol)
 }
 
 asymptSDMultinomial<-function(p,derivative){
@@ -46,7 +46,7 @@ asymptSDMultinomial<-function(p,derivative){
 
 asymptoticTest<-function(mdr){
   #calculate asymptotic min eps
-  vol = asymptStDev(mdr)
+  vol = asymptStDev(mdr)/sqrt(mdr$n)
   qt=qnorm(1-mdr$alpha,0,1)
   aps = mdr$min.distance^2 + qt*vol
   return(sqrt(aps))

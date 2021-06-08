@@ -1,14 +1,17 @@
 source("asymptoticTest.R")
-source("bootstrapTest.R")
-source("bootstrapTest2.R")
+source("asymptoticTestBootstrapVariance.R")
+source("empiricalBootstrapTest.R")
 source("simulation.R")
+source("BootstrapTestTPercentile.R")
 library(minpack.lm)
 
 logit=qlogis
 logistic = plogis
+none=""
 asymptotic="asymptotic"
-bootstrap="bootstrap"
-bootstrap2="bootstrap2"
+asymptoticBootstrapVariance="asymptoticBootstrapVariance"
+empiricalBootstrap="empiricalBootstrap"
+tPercentileBootstrap="tPercentileBootstrap"
 
 min_dst_logit<-function(formula,data, weights,  test, alpha=0.05,
                         nSimulation=200){
@@ -56,15 +59,18 @@ min_dst_logit<-function(formula,data, weights,  test, alpha=0.05,
   if (asymptotic==test) {
     mdr$min.epsilon=asymptoticTest(mdr=mdr)
   }
-
-  if (bootstrap==test){
-    mdr$min.epsilon=bootstrapTest(mdr,nSimulation)
+  
+  if (asymptoticBootstrapVariance==test){
+    mdr$min.epsilon=asymptoticTestBootstrapVariance(mdr,nSimulation)
   }
   
-  if (bootstrap2==test){
-    mdr$min.epsilon=bootstrapTest2(mdr,nSimulation)
+  if (empiricalBootstrap==test){
+    mdr$min.epsilon=empiricalBootstrapTest(mdr,nSimulation)
   }
   
+  if (tPercentileBootstrap==test){
+    mdr$min.epsilon=tPercentileBootstrapTest(mdr,nSimulation)
+  }
   
   return(mdr)
 }
