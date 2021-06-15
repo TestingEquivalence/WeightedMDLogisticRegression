@@ -2,7 +2,12 @@ library(parallel)
 
 resample.p<-function(n,p){
   f<-function(r){
-    return(rbinom(1,r[1],r[2])/r[1])
+    if (r[1]>0){
+      return(rbinom(1,r[1],r[2])/r[1])
+    }
+    else{
+      return(0)
+    }
   }
   
   pdf=data.frame(n=n,p=p)

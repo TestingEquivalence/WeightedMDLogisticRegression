@@ -2,7 +2,6 @@ source("dataSets.R")
 source("mdLogitRegression.R")
 source("size.R")
 source("power.R")
-source("bootstrapTest.R")
 
 # data 
 
@@ -22,13 +21,14 @@ frm="p ~ Class+Sex+Age"
 
 # using logit regression
 lr <- glm(frm, df, family = binomial("logit"), weights = n)
-v=(df$p-lr$fitted.values)*df$n/sum(df$n)
-lr$min.distance=sqrt(sum((v)^2))
+v=(df$p-lr$fitted.values)*weights(lr)/sum(weights(lr))
+lr$min.distance=sqrt(sum(v*v))
 write.result(lr,"lr.csv")
 
 # using minimum distance regression
 set.seed(01012021)
-mdr = min_dst_logit(frm,df,weights=df$n,test = asymptotic)
+mdr = min_dst_logit(frm,df,weights=df$n,
+                    test = asymptoticBootstrapVariance, nSimulation = 1000)
 write.result(mdr,"mdr.csv")
 
 
@@ -85,7 +85,7 @@ write.results(res,"data_set_power_mdr.csv")
 ###########################################################
 
 # obtain minimum distance model for technical and simulate the test power
-mdr = min_dst_logit(frm,df,weights=df$n,test = asymptotic)
+mdr = min_dst_logit(frm,df,weights=df$n,test = asymptoticBootstrapVariance)
 
 res=simulatePowerAtModel(df,
                          n=df$n,

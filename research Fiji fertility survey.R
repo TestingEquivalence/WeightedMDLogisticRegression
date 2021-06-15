@@ -15,15 +15,14 @@ frm="p ~ wantsMore+education+age"
 ###########################################################
 
 # using logit regression
-lr = glm(frm,df, family = binomial("logit"), weights =n)
-v=(df$p-lr$fitted.values)*df$n/sum(df$n)
-lr$min.distance=sqrt(sum((v)^2))
+lr <- glm(frm, df, family = binomial("logit"), weights = n)
+v=(df$p-lr$fitted.values)*weights(lr)/sum(weights(lr))
+lr$min.distance=sqrt(sum(v*v))
 write.result(lr,"lr.csv")
 
 # using minimum distance regression
 set.seed(01012021)
-mdr = min_dst_logit(frm,df,weights=df$n,test = bootstrap2, 
-                    nSimulation = 1000)
+mdr = min_dst_logit(frm,df,weights=df$n,test = tPercentileBootstrap, nSimulation = 1000)
 write.result(mdr,"mdr.csv")
 
 
@@ -80,7 +79,7 @@ write.results(res,"data_set_power_mdr.csv")
 ###########################################################
 
 # obtain minimum distance model for technical and simulate the test power
-mdr = min_dst_logit(frm,df,weights=df$n,test = bootstrap2, nSimulation = 1000)
+mdr = min_dst_logit(frm,df,weights=df$n,test = tPercentileBootstrap)
 
 res=simulatePowerAtModel(df,
                          n=df$n,
@@ -93,9 +92,9 @@ write.results(res,"size_mdr.csv")
 ###########################################################
 
 # obtain minimum distance model for technical and simulate the test power
-mdr = min_dst_logit(frm,df,weights=df$n,test = asymptotic)
+mdr = min_dst_logit(frm,df,weights=df$n,test = asymptoticBootstrapVariance)
 
-res= simulatePowerAtBoundary(p=df$p,mdr, nSimulation=1000, eps=0.38)
+res= simulatePowerAtBoundary(p=df$p,mdr, nSimulation=1000, eps=0.35)
 write.csv(res,"power_mdr.csv")
 
 
